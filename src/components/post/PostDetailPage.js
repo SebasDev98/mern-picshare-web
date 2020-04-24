@@ -33,8 +33,9 @@ class PostDetailPage extends Component {
     const {
       match: { params },
       postDetails,
+      user,
     } = this.props;
-    if (!postDetails.like) {
+    if (!postDetails.like && user) {
       this.props.saveLikePost(params.postId);
     }
   };
