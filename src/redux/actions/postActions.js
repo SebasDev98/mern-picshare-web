@@ -85,11 +85,10 @@ export function getPost(postId) {
 
 export function savePost(post) {
   return async (dispatch, getState) => {
-    dispatch(beginApiCall());
     const { token } = getState().user;
     const formData = new FormData();
     formData.set("text", post.text);
-    console.log("POST", post);
+
     formData.append("postImg", post.postImg);
 
     try {
@@ -102,7 +101,13 @@ export function savePost(post) {
 
       dispatch(savePostSuccess(response.data.post));
     } catch (error) {
-      console.log("ERROR ON ACTION");
+      console.log(error);
+      dispatch(
+        openErrorNotification(
+          (error.response && error.response.data.message) ||
+            "An Error Has Ocurred"
+        )
+      );
     }
   };
 }
