@@ -4,7 +4,7 @@ import { beginApiCall } from "./apiStatusActions";
 import { saveUserAndToken, deleteUserAndToken } from "./../../auth/auth";
 import { openErrorNotification } from "./notificationActions";
 
-const API_URL = process.env.REACT_APP_API_POST_URL;
+const API_URL = process.env.REACT_APP_API_USER_URL;
 
 export function loginSuccess(user, token) {
   return { type: types.USER_LOGIN_SUCCESS, payload: { user, token } };
