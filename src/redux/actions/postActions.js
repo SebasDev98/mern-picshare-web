@@ -2,8 +2,8 @@ import axios from "axios";
 import * as types from "./actionTypes";
 import { beginApiCall } from "./apiStatusActions";
 import {
-  openSuccesNotification,
   openErrorNotification,
+  openSuccesNotification,
 } from "./notificationActions";
 const API_URL = process.env.REACT_APP_API_POST_URL;
 
@@ -100,6 +100,8 @@ export function savePost(post) {
       });
 
       dispatch(savePostSuccess(response.data.post));
+      dispatch(openSuccesNotification("Added Successfully"));
+      return { success: true };
     } catch (error) {
       console.log(error);
       dispatch(
@@ -108,6 +110,8 @@ export function savePost(post) {
             "An Error Has Ocurred"
         )
       );
+
+      return { success: false };
     }
   };
 }
@@ -126,6 +130,7 @@ export function saveComment(postId, comment) {
       );
 
       dispatch(saveCommentSuccess(response.data.comment));
+      return { success: true };
     } catch (error) {
       console.log(error);
       dispatch(
@@ -134,6 +139,7 @@ export function saveComment(postId, comment) {
             "An Error Has Ocurred"
         )
       );
+      return { success: false };
     }
   };
 }

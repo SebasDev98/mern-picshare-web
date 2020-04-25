@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Container from "@material-ui/core/Container";
+
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import { Paper, Button, Avatar, CircularProgress } from "@material-ui/core";
 import LockOutLineIcon from "@material-ui/icons/LockOutlined";
 import Grid from "@material-ui/core/Grid";
-import { login } from "./../../auth/auth";
+
 import { emailValidation } from "./../../utils/validations";
-import * as userActions from "./../../redux/actions/userActions";
-import { bindActionCreators } from "redux";
+import { login } from "./../../redux/actions/userActions";
+
 import { withRouter } from "react-router-dom";
 const styles = {
   container: {
@@ -60,7 +60,7 @@ class LoginPage extends Component {
     e.preventDefault();
 
     this.toggleLoading();
-    const result = await this.props.actions.login({ email, password });
+    const result = await this.props.login({ email, password });
     if (result.success) this.props.history.push("/");
     else {
       this.toggleLoading();
@@ -130,10 +130,8 @@ class LoginPage extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(userActions, dispatch),
-  };
-}
+const mapDispatchToProps = {
+  login,
+};
 
 export default withRouter(connect(null, mapDispatchToProps)(LoginPage));

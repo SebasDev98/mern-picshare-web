@@ -1,15 +1,15 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
+import {
+  Typography,
+  Avatar,
+  CardActions,
+  CardContent,
+  CardMedia,
+  CardHeader,
+  Card,
+} from "@material-ui/core";
+
 import { red } from "@material-ui/core/colors";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import { Link, useRouteMatch } from "react-router-dom";
@@ -19,10 +19,6 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
-// import FavoriteIcon from "@material-ui/icons/Favorite";
-// import ShareIcon from "@material-ui/icons/Share";
-
-// import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  icon: {
+    color: `rgba(0,0,0,0.54)`,
+  },
 }));
 
 export default function Post({ post }) {
@@ -54,7 +53,7 @@ export default function Post({ post }) {
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
+          <Avatar aria-label={post.authorName} className={classes.avatar}>
             {post.authorName[0]}
           </Avatar>
         }
@@ -67,7 +66,7 @@ export default function Post({ post }) {
       >
         <CardMedia
           className={classes.media}
-          image={`${process.env.REACT_APP_BASE_URL}assets/images/${post.imageId}`}
+          image={post.imageId}
           title={post.imageId.split("-")[1]}
         />
         <CardContent>
@@ -76,16 +75,12 @@ export default function Post({ post }) {
           </Typography>
         </CardContent>
       </Link>
-      <CardActions disableSpacing>
-        <IconButton aria-label="like this post">
-          <ThumbUpIcon /> {post.likes}
-        </IconButton>
-
-        <IconButton aria-label="like this post">
-          <VisibilityIcon /> {post.views}
-        </IconButton>
-
-        {dayjs(post.createdAt).from(dayjs())}
+      <CardActions style={{ fontSize: "1.5rem" }}>
+        <ThumbUpIcon color="primary" /> {post.likes}
+        <VisibilityIcon className={classes.icon} /> {post.views}
+        <span style={{ marginLeft: 30, fontSize: "1rem" }}>
+          {dayjs(post.createdAt).from(dayjs())}
+        </span>
       </CardActions>
     </Card>
   );

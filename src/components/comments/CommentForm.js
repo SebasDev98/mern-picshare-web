@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import { saveComment } from "./../../redux/actions/postActions";
-import { bindActionCreators } from "redux";
-import { isLogedIn } from "./../../auth/auth";
+import { TextField, Button, Grid } from "@material-ui/core";
+
+import { withRouter } from "react-router-dom";
 export class CommentForm extends Component {
   constructor(props) {
     super(props);
@@ -13,7 +9,6 @@ export class CommentForm extends Component {
     this.state = {
       text: "",
       loading: false,
-      isLogedIn: isLogedIn(),
     };
   }
 
@@ -30,25 +25,28 @@ export class CommentForm extends Component {
     });
   };
 
-  handleSaveComment = async (e) => {
-    const { user } = this.props;
+  handleGoToLogin = () => {
+    this.props.history.push("/login");
+  };
 
+  handleSaveComment = async (e) => {
     e.preventDefault();
     let comment = {
       text: this.state.text,
-      //Missing author
     };
     this.toggleLoading();
-    await this.props.saveComment(this.props.postId, comment);
-
+    const result = await this.props.saveComment(this.props.postId, comment);
     this.toggleLoading();
-    this.setState({
-      text: "",
-    });
+    if (result.success) {
+      this.setState({
+        text: "",
+      });
+    }
   };
 
   render() {
-    const { text, loading, isLogedIn } = this.state;
+    const { text } = this.state;
+    const { isLogedIn } = this.props;
     return (
       <Grid
         container
@@ -83,7 +81,7 @@ export class CommentForm extends Component {
               variant="contained"
               color="secondary"
               style={{ marginLeft: 5 }}
-              onClick={this.handleSaveComment}
+              onClick={this.handleGoToLogin}
             >
               Log In
             </Button>
@@ -94,14 +92,4 @@ export class CommentForm extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    user: state.user.user,
-  };
-}
-
-const mapDispatchToProps = {
-  saveComment,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CommentForm);
+export default withRouter(CommentForm);

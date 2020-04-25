@@ -13,6 +13,27 @@ export default class PostForm extends Component {
     loading: false,
     text: "",
     postImg: undefined,
+    postTextErrorMessage: "",
+    postTextError: false,
+  };
+
+  validateText = () => {
+    let { text, postTextErrorMessage, postTextError } = this.state;
+
+    if (text.length === 0) {
+      postTextError = true;
+      postTextErrorMessage = "Post's description is required";
+    } else {
+      postTextError = false;
+      postTextErrorMessage = "";
+    }
+
+    this.setState({
+      postTextError,
+      postTextErrorMessage,
+    });
+
+    return !postTextError;
   };
 
   handleChangeImage = (e) => {
@@ -34,46 +55,61 @@ export default class PostForm extends Component {
       text,
       postImg,
     };
-    this.toggleLoading();
-    await this.props.savePost(post);
+    if (this.validateText()) {
+      this.toggleLoading();
+      const result = await this.props.savePost(post);
 
-    this.toggleLoading();
-    this.setState({
-      text: "",
-      postImg: undefined,
-    });
+      if (result.success) {
+        this.setState({
+          text: "",
+          postImg: undefined,
+        });
+      }
+      this.toggleLoading();
+    }
   };
 
   handleChangeText = (e) => {
     const { value } = e.target;
+
+    this.validateText();
     this.setState({
       text: value,
     });
   };
 
   render() {
-    const { loading, text, postImg } = this.state;
+    const {
+      loading,
+      text,
+      postImg,
+      postTextError,
+      postTextErrorMessage,
+    } = this.state;
 
     return (
       <Grid
         container
         direction="row"
         justify="space-between"
-        alignItems="flex-end"
+        alignItems="center"
         style={{
           marginBottom: 20,
         }}
       >
-        <Grid item md={8} lg={8}>
+        <Grid item md={7} lg={7}>
           <TextField
             value={text}
+            required={true}
             onChange={this.handleChangeText}
+            error={postTextError}
+            helperText={postTextErrorMessage}
             id="post-text"
             label={"Description"}
             fullWidth
           />
         </Grid>
-        <Grid item md={1} lg={1}>
+        <Grid item md={2} lg={2}>
           <input
             onChange={this.handleChangeImage}
             accept="image/png, image/jpeg, image/jpg"
@@ -85,7 +121,7 @@ export default class PostForm extends Component {
           <label htmlFor="post-img-file">
             <IconButton
               color="primary"
-              aria-label="upload picture"
+              aria-label="upload image"
               component="span"
             >
               <PhotoCamera />
@@ -100,16 +136,14 @@ export default class PostForm extends Component {
             style={{ marginLeft: 5 }}
             onClick={this.handleSavePost}
           >
-            {loading ? <CircularProgress size={20} color="secondary" /> : "Add"}
+            {loading ? (
+              <CircularProgress size={20} style={{ color: "white" }} />
+            ) : (
+              "Add"
+            )}
           </Button>
         </Grid>
       </Grid>
     );
   }
 }
-
-// const mapDispatchToProps = {
-//   savePost,
-// };
-
-// export default connect(null, mapDispatchToProps)(PostForm);

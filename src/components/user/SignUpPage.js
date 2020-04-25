@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import { Paper, Button, Avatar, CircularProgress } from "@material-ui/core";
 import LockOutLineIcon from "@material-ui/icons/LockOutlined";
-import Grid from "@material-ui/core/Grid";
+import {
+  Typography,
+  TextField,
+  Grid,
+  Paper,
+  Button,
+  Avatar,
+  CircularProgress,
+} from "@material-ui/core";
 
 import { signUp } from "../../redux/actions/userActions";
 import { emailValidation } from "./../../utils/validations";

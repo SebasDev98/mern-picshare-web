@@ -1,24 +1,17 @@
+import { Box, Grid, IconButton, Paper } from "@material-ui/core";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import React, { Component } from "react";
-import Post from "./Post";
-import Grid from "@material-ui/core/Grid";
+import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import {
   getPost,
   saveLikePost,
+  saveComment,
   saveViewPost,
 } from "./../../redux/actions/postActions";
-import { connect } from "react-redux";
-import Spinner from "./../common/Spinner";
-import Paper from "@material-ui/core/Paper";
-import { bindActionCreators } from "redux";
 import CommentsContainer from "./../comments/CommentsContainer";
-import { Box } from "@material-ui/core";
-
-import IconButton from "@material-ui/core/IconButton";
-
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-
-import VisibilityIcon from "@material-ui/icons/Visibility";
+import Spinner from "./../common/Spinner";
 
 class PostDetailPage extends Component {
   async componentDidMount() {
@@ -41,7 +34,7 @@ class PostDetailPage extends Component {
   };
 
   render() {
-    const { postDetails, loading, match, user } = this.props;
+    const { postDetails, loading, match, user, saveComment } = this.props;
 
     return loading || !postDetails ? (
       <Spinner />
@@ -50,33 +43,36 @@ class PostDetailPage extends Component {
         <Grid item lg={8}>
           <Paper>
             <img
+              alt={postDetails.imageName}
               width="100%"
-              src={`${process.env.REACT_APP_BASE_URL}assets/images/${postDetails.imageId}`}
+              src={postDetails.imageId}
             />
           </Paper>
           <Paper>
             <Box>
               <IconButton
-                aria-label="like this post"
+                aria-label="like-button"
                 onClick={this.handleLikePost}
                 style={{ cursor: !user ? "not-allowed" : "cursor" }}
               >
-                <ThumbUpIcon color={postDetails.like ? "primary" : "inherit"} />{" "}
+                <ThumbUpIcon color={postDetails.like ? "primary" : "inherit"} />
                 {postDetails.likes}
               </IconButton>
 
               <IconButton
-                aria-label="like this post"
+                aria-label="like-button"
                 style={{ cursor: "inherit" }}
               >
                 <VisibilityIcon /> {postDetails.views}
               </IconButton>
             </Box>
           </Paper>
-          {/* <Post post={postDetails} /> */}
+
           <CommentsContainer
             postId={match.params.postId}
             comments={postDetails.comments}
+            saveComment={saveComment}
+            user={user}
           />
         </Grid>
       </Grid>
@@ -96,6 +92,7 @@ const mapDispatchToProps = {
   getPost,
   saveLikePost,
   saveViewPost,
+  saveComment,
 };
 
 export default withRouter(

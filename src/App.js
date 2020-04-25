@@ -1,20 +1,21 @@
 import React, { Component } from "react";
-import PostsPage from "./components/post/PostsPage";
-import NavBar from "./components/layout/NavBar";
-import Container from "@material-ui/core/Container";
-import Snackbar from "@material-ui/core/Snackbar";
-import PostDetailPage from "./components/post/PostDetailPage";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import LoginPage from "./components/user/LoginPage";
-import { verifyToken } from "./redux/actions/userActions";
+
+import { Container, Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import {
-  openNotification,
-  closeNotification,
-} from "./redux/actions/notificationActions";
+import PostDetailPage from "./components/post/PostDetailPage";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import LoginPage from "./components/user/LoginPage";
+import PostsPage from "./components/post/PostsPage";
+import SignUpPage from "./components/user/SignUpPage";
+import NavBar from "./components/layout/NavBar";
+
+import { verifyToken } from "./redux/actions/userActions";
+
+import { closeNotification } from "./redux/actions/notificationActions";
 
 import { connect } from "react-redux";
-import SignUpPage from "./components/user/SignUpPage";
+
 class App extends Component {
   async componentDidMount() {
     await this.props.verifyToken();
@@ -32,7 +33,6 @@ class App extends Component {
           }}
           open={notification.open}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          // message={}
           onClose={closeNotification}
         >
           <Alert

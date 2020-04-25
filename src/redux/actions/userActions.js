@@ -50,7 +50,7 @@ export function verifyToken() {
     const { token } = getState().user;
     dispatch(beginApiCall());
     try {
-      const response = await axios.get(`${API_URL}/verify-token`, {
+      await axios.get(`${API_URL}/verify-token`, {
         headers: { Authorization: token },
       });
 

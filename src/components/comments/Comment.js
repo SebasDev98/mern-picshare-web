@@ -1,15 +1,22 @@
 import React from "react";
-import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
+
+import {
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Typography,
+} from "@material-ui/core";
 export default function Comment({ comment }) {
   return (
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
-        <Avatar alt={comment.authorName} />
+        <Avatar
+          aria-label={comment.authorName}
+          style={{ backgroundColor: "#f44336" }}
+        >
+          {comment.authorName[0]}
+        </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={comment.authorName}

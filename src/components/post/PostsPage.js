@@ -1,20 +1,16 @@
 import React, { Component } from "react";
-import * as postsActions from "./../../redux/actions/postActions";
+import { savePost, getPosts } from "./../../redux/actions/postActions";
 import { connect } from "react-redux";
 import Spinner from "./../common/Spinner";
-import { bindActionCreators } from "redux";
+
 import Post from "./Post";
 import Grid from "@material-ui/core/Grid";
 import PostForm from "./PostForm";
 class PostsPage extends Component {
   state = { loading: true };
   async componentDidMount() {
-    try {
-      await this.props.actions.getPosts();
-      this.setState({ loading: false });
-    } catch (error) {
-      alert("ERROR ON COMPONENT", error);
-    }
+    await this.props.getPosts();
+    this.setState({ loading: false });
   }
 
   render() {
@@ -24,7 +20,7 @@ class PostsPage extends Component {
       <Spinner />
     ) : (
       <>
-        {user && <PostForm savePost={this.props.actions.savePost} />}
+        {user && <PostForm savePost={this.props.savePost} />}
         <Grid container spacing={3} style={{ marginTop: 25 }}>
           {posts.map((post) => (
             <Grid key={post._id} item xs={12} sm={6} lg={3} md={3}>
@@ -45,10 +41,9 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(postsActions, dispatch),
-  };
-}
+const mapDispatchToProps = {
+  savePost,
+  getPosts,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsPage);
