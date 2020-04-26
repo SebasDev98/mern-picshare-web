@@ -45,7 +45,7 @@ class PostDetailPage extends Component {
             <img
               alt={postDetails.imageName}
               width="100%"
-              src={postDetails.imageId}
+              src={`${process.env.REACT_APP_BASE_URL}assets/images/${postDetails.imageId}`}
             />
           </Paper>
           <Paper>

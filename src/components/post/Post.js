@@ -66,7 +66,7 @@ export default function Post({ post }) {
       >
         <CardMedia
           className={classes.media}
-          image={post.imageId}
+          image={`${process.env.REACT_APP_BASE_URL}assets/images/${post.imageId}`}
           title={post.imageId.split("-")[1]}
         />
         <CardContent>
